@@ -1,7 +1,7 @@
 {
   "name": "Text Editor",
   "title": "Text Editor",
-  "url": "/textEditor/index.html",
+  "url": "index.html",
   "icon": "logo.png",
   "multipleWindows": true,
   "opens": [
