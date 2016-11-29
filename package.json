@@ -1,0 +1,15 @@
+{
+  "name": "text-editor",
+  "productName": "Text Editor 2",
+  "description": "Text editor for Silk GUI",
+  "version": "0.0.2",
+  "icon": "public/logo.png",
+  "dependencies": {
+    "eureca.io": "^0.6.42",
+    "express": "^4.14.0",
+    "sockjs": "^0.3.18"
+  },
+  "silk": {
+    "url": "http://localhost:2004"
+  }
+}

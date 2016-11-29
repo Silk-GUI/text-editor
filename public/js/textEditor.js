@@ -1,13 +1,14 @@
 var file = {};
 file.path = null;
 file.changed = false;
-$("#notifications").html("Please open a file using File Explorer");
+$("#notifications").html("Untitled");
 Silk.event("openFile", open);
+
 
 function open(path) {
 
   if(path == null) {
-    $("#notifications").html("Please open a file using File Explorer");
+    $("#notifications").html("Untitled");
     file.path == null;
   } else {
     if(file.changed === true) {
@@ -46,6 +47,7 @@ function open(path) {
 $("#text").on("keydown", function (e) {
   if(file.changed == false) {
     $("#toolBar").css("borderBottomColor", "rgba(219, 179, 53, 1)");
+    $("#save").addClass('enabled');
   }
   file.changed = true;
 });
@@ -53,8 +55,7 @@ $("#text").on("keydown", function (e) {
 $("#reload").click(function () {
   window.location.reload();
 });
-$('#test').click(function () {
-  console.log('clicked #test');
+$('#open').click(function () {
   Manager.pipe('filePicker', {}, function (e, r) {
     console.log(e, r);
     if(e) {

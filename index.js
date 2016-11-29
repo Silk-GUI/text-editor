@@ -1,48 +1,25 @@
-var methods = Silk.methods;
+var sockjs = require('sockjs');
+var http = require('http');
+var Eureca = require('eureca.io');
+var electronApp = require('app');
+var BrowserWindow = require('browser-window');
+var path = require('path');
+var express = require('express');
 
-methods.add({
-  "te/open": function (file, callObj, send) {
-    var fs = require("fs");
-    var fileName = file;
-    console.log("fileName");
-    fs.exists(fileName, function (exists) {
-      if (!exists) return send("this file does not exist");
+var exports = require('./exports');
 
-      fs.stat(fileName, function (err, stats) {
-        if (err) return send(err);
-        if (stats.isDirectory())
-          return send(new Error("Editing directories in a text editor is not currently supported"));
-        fs.readFile(fileName, function (err, data) {
-          if (err) return send(err);
-          var ret = {
-            state: "ready",
-            content: data.toString("utf-8")
-          }
-          send(void(0), ret);
-        })
-      });
-    });
-    return {
-      state: "loading"
-    }
-  }
+var app = express();
+var server = http.createServer(app);
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+var eurecaServer = new Eureca.Server({ transport: 'sockjs' });
+eurecaServer.attach(server);
+eurecaServer.exports = exports;
+
+server.listen(2004, '0.0.0.0');
+
+electronApp.on('ready', function () {
+  var window = new BrowserWindow();
+  window.loadUrl('http://localhost:2004');
 });
-
-methods.add({
-  "te/save": function (data, callObj, send) {
-    var fs = require("fs");
-    console.log(data);
-    path = data.path;
-    contents = data.contents;
-    console.log("==========");
-    // console.log(contents);
-    fs.writeFile(path, contents, function (err) {
-      if (err) return console.log(err);
-      console.log("saved: " + path);
-    });
-    console.log("finished");
-    
-    // tricks silk into sending return value;
-    return " ";
-  }
-})
